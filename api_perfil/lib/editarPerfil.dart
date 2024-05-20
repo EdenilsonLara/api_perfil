@@ -69,7 +69,20 @@ class _EditarPerfilState extends State<EditarPerfil> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Perfil actualizado con éxito')),
       );
-      Navigator.pop(context);
+
+      // Devuelve el perfil actualizado a la vista anterior
+      Navigator.pop(
+          context,
+          Perfil(
+            id: widget.perfil.id,
+            nombre: nombre,
+            apodo: apodo,
+            edad: edad,
+            record: widget.perfil.record,
+            image: _selectedImage != null
+                ? _selectedImage!.path
+                : widget.perfil.image,
+          ));
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error al actualizar el perfil: $e')),
