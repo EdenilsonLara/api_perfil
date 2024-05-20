@@ -2,15 +2,33 @@ import 'package:flutter/material.dart';
 import 'perfil.dart';
 import 'editarPerfil.dart';
 
-class Usuario extends StatelessWidget {
+class Usuario extends StatefulWidget {
   final Perfil perfil;
 
   Usuario({required this.perfil});
 
   @override
-  Widget build(BuildContext context) {
-    String imageUrl = 'http://192.168.1.4:3000/getImage/${perfil.image}';
+  _UsuarioState createState() => _UsuarioState();
+}
 
+class _UsuarioState extends State<Usuario> {
+  late Perfil perfil;
+  String get imageUrl => 'http://192.168.1.36:3000/getImage/${perfil.image}';
+
+  @override
+  void initState() {
+    super.initState();
+    perfil = widget.perfil;
+  }
+
+  void _updateProfile(Perfil updatedPerfil) {
+    setState(() {
+      perfil = updatedPerfil;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.black87, // Fondo oscuro
       child: Scaffold(
@@ -44,13 +62,17 @@ class Usuario extends StatelessWidget {
                 SizedBox(height: 20),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      final updatedPerfil = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => EditarPerfil(perfil: perfil),
                         ),
                       );
+
+                      if (updatedPerfil != null) {
+                        _updateProfile(updatedPerfil);
+                      }
                     },
                     child: Text(
                       'Editar Perfil',

@@ -39,7 +39,7 @@ class Inicio extends StatelessWidget {
               child: CircleAvatar(
                 radius: 15,
                 backgroundImage: NetworkImage(
-                  'http://192.168.1.4:3000/getImage/${perfil.image}',
+                  'http://192.168.1.36:3000/getImage/${perfil.image}',
                 ),
               ),
             ),

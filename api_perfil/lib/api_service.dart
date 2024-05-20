@@ -3,7 +3,7 @@ import 'package:api_perfil/perfil.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl = 'http://192.168.1.4:3000';
+  final String baseUrl = 'http://192.168.1.36:3000';
 
   Future<Map<String, dynamic>> home() async {
     final response = await http.get(Uri.parse('$baseUrl/home'));
