@@ -67,7 +67,9 @@ class _CrearPerfilState extends State<CrearPerfil> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Crear Perfil'),
+        backgroundColor: Color.fromARGB(255, 202, 120, 65),
       ),
+      backgroundColor: Color.fromARGB(255, 104, 95, 185),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -77,28 +79,64 @@ class _CrearPerfilState extends State<CrearPerfil> {
               ElevatedButton(
                 onPressed: _pickImage,
                 child: Text('Seleccionar Imagen'),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 233, 167, 69),
+                ),
               ),
               SizedBox(height: 20),
               _imageFile != null
                   ? Image.file(File(_imageFile!.path))
-                  : Icon(Icons.image, size: 100),
+                  : Icon(Icons.image, size: 100, color: Colors.white),
               TextField(
                 controller: nombreController,
-                decoration: InputDecoration(labelText: 'Nombre'),
+                decoration: InputDecoration(
+                  labelText: 'Nombre',
+                  labelStyle: TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                ),
+                style: TextStyle(color: Colors.white),
               ),
               TextField(
                 controller: edadController,
-                decoration: InputDecoration(labelText: 'Edad'),
+                decoration: InputDecoration(
+                  labelText: 'Edad',
+                  labelStyle: TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                ),
                 keyboardType: TextInputType.number,
+                style: TextStyle(color: Colors.white),
               ),
               TextField(
                 controller: apodoController,
-                decoration: InputDecoration(labelText: 'Apodo'),
+                decoration: InputDecoration(
+                  labelText: 'Apodo',
+                  labelStyle: TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                ),
+                style: TextStyle(color: Colors.white),
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _saveProfile,
                 child: Text('Crear Perfil'),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 233, 167, 69),
+                ),
               ),
             ],
           ),

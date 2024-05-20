@@ -66,14 +66,14 @@ class Inicio extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.deepPurple,
+                      primary: Color.fromARGB(255, 202, 120, 65),
                       padding: EdgeInsets.symmetric(vertical: 16),
                       textStyle: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    child: Text('Jugar'),
+                    child: Text('Jugar', style: TextStyle(color: Colors.white)),
                   ),
                 ),
                 Padding(
@@ -83,14 +83,15 @@ class Inicio extends StatelessWidget {
                       SystemNavigator.pop(); // Cerrar la aplicación
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
+                      primary: Color.fromARGB(255, 202, 120, 65),
                       padding: EdgeInsets.symmetric(vertical: 16),
                       textStyle: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    child: Text('Salir del Juego'),
+                    child: Text('Salir del Juego',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

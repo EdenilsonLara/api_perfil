@@ -15,7 +15,6 @@ class _EditarPerfilState extends State<EditarPerfil> {
   late TextEditingController nombreController;
   late TextEditingController apodoController;
   late TextEditingController edadController;
-  late TextEditingController recordController;
 
   final ApiService apiService = ApiService(); // Instancia del servicio de API
 
@@ -25,15 +24,12 @@ class _EditarPerfilState extends State<EditarPerfil> {
     nombreController = TextEditingController(text: widget.perfil.nombre);
     apodoController = TextEditingController(text: widget.perfil.apodo);
     edadController = TextEditingController(text: widget.perfil.edad.toString());
-    recordController =
-        TextEditingController(text: widget.perfil.record.toString());
   }
 
   Future<void> _updateProfile() async {
     final String nombre = nombreController.text;
     final String apodo = apodoController.text;
     final int edad = int.tryParse(edadController.text) ?? 0;
-    final int record = int.tryParse(recordController.text) ?? 0;
 
     if (nombre.isEmpty || apodo.isEmpty || edad == 0) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -46,7 +42,6 @@ class _EditarPerfilState extends State<EditarPerfil> {
       'nombre': nombre,
       'apodo': apodo,
       'edad': edad,
-      'record': record,
     };
 
     try {
@@ -67,36 +62,87 @@ class _EditarPerfilState extends State<EditarPerfil> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Editar Perfil'),
+        backgroundColor: Color.fromARGB(255, 202, 120, 65),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: nombreController,
-              decoration: InputDecoration(labelText: 'Nombre'),
-            ),
-            TextField(
-              controller: apodoController,
-              decoration: InputDecoration(labelText: 'Apodo'),
-            ),
-            TextField(
-              controller: edadController,
-              decoration: InputDecoration(labelText: 'Edad'),
-              keyboardType: TextInputType.number,
-            ),
-            TextField(
-              controller: recordController,
-              decoration: InputDecoration(labelText: 'Record'),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updateProfile,
-              child: Text('Guardar Cambios'),
-            ),
-          ],
+      backgroundColor: Color.fromARGB(221, 32, 31, 31), // Color de fondo oscuro
+      body: SingleChildScrollView(
+        // Widget para agregar desplazamiento
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 20),
+              Text(
+                'Nombre',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white, // Texto en color blanco
+                ),
+              ),
+              TextField(
+                controller: nombreController,
+                style: TextStyle(color: Colors.white), // Texto en color blanco
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Apodo',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white, // Texto en color blanco
+                ),
+              ),
+              TextField(
+                controller: apodoController,
+                style: TextStyle(color: Colors.white), // Texto en color blanco
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Edad',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white, // Texto en color blanco
+                ),
+              ),
+              TextField(
+                controller: edadController,
+                style: TextStyle(color: Colors.white), // Texto en color blanco
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _updateProfile,
+                child: Text('Guardar Cambios'),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 233, 167, 69),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -4,6 +4,27 @@ import 'crearPerfil.dart'; // Importar la vista de CrearPerfil
 import 'perfil.dart';
 import 'api_service.dart'; // Importa el servicio de API
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
 
@@ -13,16 +34,46 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   List<Perfil> perfiles = []; // Lista de perfiles
   bool _isLoading = true; // Variable para controlar el estado de carga
+  late AnimationController _controller;
+  late Animation<double> _animation;
   bool _isAppBarVisible = false; // Controla la visibilidad de la AppBar
   final ApiService apiService = ApiService(); // Instancia del servicio de API
 
   @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          _controller.forward();
+        }
+      });
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        _loadProfiles(); // Cuando la animación comienza de nuevo, cargar perfiles
+      }
+    });
+    _controller.forward();
     _loadProfiles(); // Cargar perfiles al iniciar la aplicación
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> _loadProfiles() async {
@@ -43,6 +94,30 @@ class _MyHomePageState extends State<MyHomePage> {
         _isLoading = false;
         _isAppBarVisible = true;
       });
+    }
+  }
+
+  Future<void> _deleteProfile(String id) async {
+    try {
+      final response = await apiService.deleteProyecto(id);
+      print('Respuesta de eliminación: $response');
+      if (response['success'] == true) {
+        setState(() {
+          perfiles.removeWhere((perfil) => perfil.id == id);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Perfil eliminado correctamente')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Eliminado correctamente')),
+        );
+      }
+    } catch (e) {
+      print('Eliminado correctamente: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al eliminar el perfil: $e')),
+      );
     }
   }
 
@@ -71,13 +146,35 @@ class _MyHomePageState extends State<MyHomePage> {
           : null, // Si _isAppBarVisible es false, no muestra la AppBar
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: _isLoading ? _buildLoadingIndicator() : _buildProfilesListView(),
+        child: _isLoading ? _buildLoadingWidget() : _buildProfilesListView(),
       ),
     );
   }
 
-  Widget _buildLoadingIndicator() {
-    return Center(child: CircularProgressIndicator());
+  Widget _buildLoadingWidget() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'Snake Rewind',
+          style: TextStyle(
+            fontSize: 32,
+            color: Color.fromARGB(255, 202, 120, 65),
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            fontFamily: 'PressStart2P',
+          ),
+        ),
+        SizedBox(height: 20),
+        SizedBox(
+          width: 200,
+          height: 200,
+          child: CustomPaint(
+            painter: SnakePainter(animationValue: _animation.value),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildProfilesListView() {
@@ -127,6 +224,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       );
                     },
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _deleteProfile(perfil.id);
+                      },
+                    ),
                   ),
                 ),
               );
@@ -158,5 +261,32 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ],
     );
+  }
+}
+
+class SnakePainter extends CustomPainter {
+  final double animationValue;
+
+  SnakePainter({required this.animationValue});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.green
+      ..style = PaintingStyle.fill;
+
+    for (int i = 0; i < 10; i++) {
+      final xPos = size.width * animationValue + (i * 20);
+      final yPos = size.height / 2;
+      canvas.drawRect(
+        Rect.fromLTWH(xPos, yPos, 15, 15),
+        paint,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
