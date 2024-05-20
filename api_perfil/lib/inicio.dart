@@ -3,7 +3,6 @@ import 'package:api_perfil/perfil.dart';
 import 'package:flutter/services.dart';
 import 'usuario.dart';
 import 'juego.dart';
-// Importa el paquete necesario para mostrar GIFs
 
 class Inicio extends StatelessWidget {
   final Perfil perfil;
@@ -31,7 +30,6 @@ class Inicio extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => Usuario(
                     perfil: perfil,
-                    parentContext: context,
                   ),
                 ),
               );
@@ -50,7 +48,7 @@ class Inicio extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          _buildBackground(), // Fondo con animaciones de serpientes
+          _buildBackground(),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -105,10 +103,10 @@ class Inicio extends StatelessWidget {
 
   Widget _buildBackground() {
     return Image.asset(
-      'gif/serpiente.gif', // Ruta relativa del GIF dentro del proyecto
-      fit: BoxFit.cover, // Ajusta el tamaño del GIF al contenedor
-      width: double.infinity, // Ancho del GIF igual al ancho del contenedor
-      height: double.infinity, // Alto del GIF igual al alto del contenedor
+      'gif/serpiente.gif',
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
     );
   }
 }
